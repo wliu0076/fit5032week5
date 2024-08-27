@@ -5,17 +5,51 @@
     <header class="d-flex justify-content-center py-3">
       <ul class="nav nav-pills">
         <li class="nav-item">
-          <router-link to="/" class="nav-link" active-class="active" aria-current="page"
-            >Home (Week 5)</router-link
-          >
+          <router-link to="/" class="nav-link" active-class="active" aria-current="page">
+            Home (Week 5)
+          </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/about" class="nav-link" active-class="active">About</router-link>
+          <router-link to="/about" class="nav-link" active-class="active">
+            About
+          </router-link>
+        </li>
+        <!-- 根据认证状态显示不同的导航项 -->
+        <li class="nav-item" v-if="!isAuthenticated">
+          <router-link to="/login" class="nav-link" active-class="active">
+            Login
+          </router-link>
+        </li>
+        <li class="nav-item" v-else>
+          <button @click="logout" class="nav-link btn btn-link">
+            Logout
+          </button>
         </li>
       </ul>
     </header>
   </div>
 </template>
+
+<script>
+import { isAuthenticated } from '../store/auth';  // 导入认证状态
+import { useRouter } from 'vue-router';          // 导入路由
+
+export default {
+  setup() {
+    const router = useRouter();
+
+    const logout = () => {
+      isAuthenticated.value = false;  // 更新认证状态
+      router.push('/login');          // 重定向到登录页面
+    };
+
+    return {
+      isAuthenticated,
+      logout
+    };
+  }
+};
+</script>
 
 <style scoped>
 .b-example-divider {
