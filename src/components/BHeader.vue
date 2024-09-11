@@ -20,7 +20,6 @@
             Login
           </router-link>
         </li>
-
         <li class="nav-item" v-else>
           <button @click="logout" class="nav-link btn btn-link">
             Logout
@@ -34,12 +33,17 @@
         </li>
       </ul>
     </header>
+
+    <!-- 显示当前用户的角色 -->
+    <div v-if="isAuthenticated" class="text-center">
+      <p>Current Role: {{ userRole }}</p> <!-- 显示用户角色 -->
+    </div>
   </div>
 </template>
 
 <script>
 import { getAuth, signOut } from 'firebase/auth';  // 导入 Firebase 认证函数
-import { isAuthenticated } from '../store/auth';   // 导入认证状态
+import { isAuthenticated, userRole } from '../store/auth';   // 导入认证状态和角色
 import { useRouter } from 'vue-router';            // 导入路由
 
 export default {
@@ -49,10 +53,16 @@ export default {
 
     const logout = async () => {
       try {
+        const currentRole = userRole.value;
+        const currentEmail = auth.currentUser ? auth.currentUser.email : 'Unknown user';
+        console.log("User logging out:", currentEmail, "with role:", currentRole); // 打印用户状态
+
         await signOut(auth);  // 调用 Firebase 的 signOut 方法
         isAuthenticated.value = false;  // 更新认证状态
-        router.push('/login');          // 重定向到登录页面
+        userRole.value = null;  // 清空角色信息
+
         console.log('User signed out successfully');
+        router.push('/login');  // 重定向到登录页面
       } catch (error) {
         console.error('Sign out error:', error);
       }
@@ -60,6 +70,7 @@ export default {
 
     return {
       isAuthenticated,
+      userRole,  // 绑定到模板
       logout
     };
   }
@@ -82,6 +93,7 @@ export default {
   background-color: var(--bs-dark);
   border-color: var(--bs-gray);
 }
+
 .form-control-dark:focus {
   color: #fff;
   background-color: var(--bs-dark);

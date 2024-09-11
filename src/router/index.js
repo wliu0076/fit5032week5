@@ -4,8 +4,7 @@ import AboutView from '../views/AboutView.vue';
 import LoginView from '../views/LoginView.vue';
 import FirebaseRegisterView from '../views/FirebaseRegisterView.vue';
 import FirebaseSignInView from '../views/FirebaseSigninView.vue';
-
-import { isAuthenticated } from '../store/auth';  // Import authentication status
+import { isAuthenticated, userRole } from '../store/auth';  // 导入认证状态和用户角色
 
 const routes = [
   {
@@ -13,12 +12,11 @@ const routes = [
     name: 'Home',
     component: HomeView
   },
-
   {
     path: '/about',
     name: 'About',
     component: AboutView,
-    meta: { requiresAuth: true }  // Mark this route as requiring authentication
+    meta: { requiresAuth: true, role: 'admin' }  // 管理员页面
   },
   {
     path: '/login',
@@ -34,7 +32,7 @@ const routes = [
     path: '/FireLogin',
     name: 'FireLogin',
     component: FirebaseSignInView
-    }
+  }
 ];
 
 const router = createRouter({
@@ -42,13 +40,21 @@ const router = createRouter({
   routes
 });
 
+// 路由守卫：检查认证状态和角色
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated.value) {
-    // If the user is not authenticated and tries to access a page that requires authentication, redirect to the login page
-    next('/login');
-  } else {
-    next();
+  if (to.meta.requiresAuth) {
+    if (!isAuthenticated.value) {
+      // 用户未登录，重定向到登录页面
+      return next('/login');
+    } 
+    
+    if (to.meta.role && to.meta.role !== userRole.value) {
+      // 角色不匹配，阻止访问
+      return next('/');
+    }
   }
+  
+  next();  // 继续导航
 });
 
 export default router;

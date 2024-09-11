@@ -9,7 +9,7 @@ import Aura from '@primevue/themes/aura';
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { isAuthenticated } from './store/auth';  // 假设你有 store 管理 isAuthenticated
+import { isAuthenticated, userRole } from './store/auth';  // 假设你有 store 管理 isAuthenticated 和 userRole
 
 // Firebase 配置
 const firebaseConfig = {
@@ -26,12 +26,21 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-// 检查认证状态并更新 isAuthenticated
+// 检查认证状态并更新 isAuthenticated 和用户角色
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    isAuthenticated.value = true;  // 用户已登录
+    isAuthenticated.value = true;  // already sign in
+    
+    // 
+    if (user.email === "admin@qq.com") {
+      userRole.value = "admin";  // admin case
+    } else {
+      userRole.value = "user";  // user case
+    }
+    
   } else {
-    isAuthenticated.value = false;  // 用户未登录
+    isAuthenticated.value = false; 
+    userRole.value = null;  
   }
 });
 
