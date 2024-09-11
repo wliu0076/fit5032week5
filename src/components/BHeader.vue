@@ -20,10 +20,17 @@
             Login
           </router-link>
         </li>
+
         <li class="nav-item" v-else>
           <button @click="logout" class="nav-link btn btn-link">
             Logout
           </button>
+        </li>
+        <li class="nav-item">
+          <router-link to="/Fireregister" class="nav-link" active-class="active">Firebase register</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/Firelogin" class="nav-link" active-class="active">Firebase Login</router-link>
         </li>
       </ul>
     </header>
@@ -31,16 +38,24 @@
 </template>
 
 <script>
-import { isAuthenticated } from '../store/auth';  // 导入认证状态
-import { useRouter } from 'vue-router';          // 导入路由
+import { getAuth, signOut } from 'firebase/auth';  // 导入 Firebase 认证函数
+import { isAuthenticated } from '../store/auth';   // 导入认证状态
+import { useRouter } from 'vue-router';            // 导入路由
 
 export default {
   setup() {
     const router = useRouter();
+    const auth = getAuth();  // 获取当前认证实例
 
-    const logout = () => {
-      isAuthenticated.value = false;  // 更新认证状态
-      router.push('/login');          // 重定向到登录页面
+    const logout = async () => {
+      try {
+        await signOut(auth);  // 调用 Firebase 的 signOut 方法
+        isAuthenticated.value = false;  // 更新认证状态
+        router.push('/login');          // 重定向到登录页面
+        console.log('User signed out successfully');
+      } catch (error) {
+        console.error('Sign out error:', error);
+      }
     };
 
     return {

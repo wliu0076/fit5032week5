@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
 import LoginView from '../views/LoginView.vue';
+import FirebaseRegisterView from '../views/FirebaseRegisterView.vue';
+import FirebaseSignInView from '../views/FirebaseSigninView.vue';
+
 import { isAuthenticated } from '../store/auth';  // Import authentication status
 
 const routes = [
@@ -10,6 +13,7 @@ const routes = [
     name: 'Home',
     component: HomeView
   },
+
   {
     path: '/about',
     name: 'About',
@@ -20,7 +24,17 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginView
-  }
+  },
+  {
+    path: '/Fireregister',
+    name: 'Fireregister',
+    component: FirebaseRegisterView
+  },
+  {
+    path: '/FireLogin',
+    name: 'FireLogin',
+    component: FirebaseSignInView
+    }
 ];
 
 const router = createRouter({
