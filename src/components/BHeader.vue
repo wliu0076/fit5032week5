@@ -29,6 +29,12 @@
           <router-link to="/Fireregister" class="nav-link" active-class="active">Firebase register</router-link>
         </li>
         <li class="nav-item">
+          <router-link to="/addbook" class="nav-link" active-class="active">Add Book</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/GetBookCount" class="nav-link" active-class="active">book count</router-link>
+        </li>
+        <li class="nav-item">
           <router-link to="/Firelogin" class="nav-link" active-class="active">Firebase Login</router-link>
         </li>
       </ul>

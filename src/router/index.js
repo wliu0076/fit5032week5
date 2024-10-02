@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
+import GetBookCountView from '../views/GetBookCountView.vue';
 import LoginView from '../views/LoginView.vue';
 import FirebaseRegisterView from '../views/FirebaseRegisterView.vue';
 import FirebaseSignInView from '../views/FirebaseSigninView.vue';
 import { isAuthenticated, userRole } from '../store/auth';  // 导入认证状态和用户角色
+import AddBookView from '../views/AddBookView.vue';
 
 const routes = [
   {
@@ -22,6 +24,16 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginView
+  },
+  {
+    path: '/getbookcount',
+    name: 'GetBookCount',
+    component: GetBookCountView
+  },
+  {
+    path: '/addbook',
+    name: 'AddBook',
+    component: AddBookView
   },
   {
     path: '/Fireregister',
